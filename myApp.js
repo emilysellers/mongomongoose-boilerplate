@@ -10,26 +10,59 @@ mongoose.connect(
   //}
 );
 
-let Person;
+// create new Schema
+const personSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  favoriteFoods: [String],
+});
+
+// create new Model
+let Person = mongoose.model("Person", personSchema);
 
 const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+  const betty = new Person({
+    name: "Betty",
+    age: 73,
+    favoriteFoods: ["sushi", "cherry pie", "hazelnuts"],
+  });
+  betty.save(function (err, data) {
+    if (err) return console.error(err);
+    done(null, data);
+  });
 };
 
+const arrayOfPeople = [
+  { name: "Buddy", age: 3, favoriteFoods: ["pears", "carrots"] },
+  { name: "Spot", age: 23, favoriteFoods: ["salmon", "huckleberries"] },
+  { name: "Sunshine", age: 121, favoriteFoods: ["seaweed", "french fries"] },
+];
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  Person.create(arrayOfPeople, function (err, data) {
+    if (err) return console.error(err);
+    done(null, data);
+  });
 };
 
 const findPeopleByName = (personName, done) => {
-  done(null /*, data*/);
+  Person.find({ name: personName }, function (err, data) {
+    if (err) return console.error(err);
+    done(null, data);
+  });
 };
 
 const findOneByFood = (food, done) => {
-  done(null /*, data*/);
+  Person.findOne({ favoriteFoods: food }, function (err, data) {
+    if (err) return console.error(err);
+    done(null, data);
+  });
 };
 
 const findPersonById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findById({ _id: personId }, function (err, data) {
+    if (err) return console.error(err);
+    done(null, data);
+  });
 };
 
 const findEditThenSave = (personId, done) => {
