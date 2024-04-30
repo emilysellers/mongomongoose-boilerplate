@@ -67,8 +67,16 @@ const findPersonById = (personId, done) => {
 
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
-
-  done(null /*, data*/);
+  //`findById` method returns `err` or `person` which is passed to callback function
+  Person.findById(personId, (err, person) => {
+    if (err) return console.error(err);
+    person.favoriteFoods.push(foodToAdd);
+    //`save` method takes callback function w/ 2 params, `updatedPerson` is object returned by `person.favoriteFoods.push()`
+    person.save((err, updatedPerson) => {
+      if (err) return console.log(err);
+      done(null, updatedPerson); //`null` as 1st arg (indicating no error), `updatedPerson` as 2nd arg represents person object w/ newly added favorite food
+    });
+  });
 };
 
 const findAndUpdate = (personName, done) => {
